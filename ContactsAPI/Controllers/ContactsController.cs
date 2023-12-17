@@ -33,5 +33,39 @@ namespace ContactsAPI.Controllers
             await dbContext.SaveChangesAsync();
             return Ok(newContact);
         }
+
+        [HttpPut("{id:Guid}")]
+        public async Task<IActionResult> UpdateContact([FromRoute] Guid id, UpdateContactRequest updateContactRequest)
+        {
+           var contact = await dbContext.Contacts.FindAsync(id);
+
+            if(contact != null)
+            {
+               contact.FullName = updateContactRequest.FullName;
+                contact.Phone = updateContactRequest.Phone;
+                contact.Email = updateContactRequest.Email;
+                contact.Address = updateContactRequest.Address;
+
+                await dbContext.SaveChangesAsync();
+
+                return Ok(contact);
+            }
+
+            return NotFound();
+        }
+
+        [HttpDelete("{id:Guid}")]
+        public async Task<IActionResult> DeleteContact([FromRoute] Guid id)
+        {
+            var contact = await dbContext.Contacts.FindAsync(id);
+            if(contact == null)
+            {
+                return NotFound();
+            }
+            dbContext.Contacts.Remove(contact);
+            await dbContext.SaveChangesAsync();
+            return Ok(contact);
+
+        }
     }
 }
