@@ -12,11 +12,14 @@ namespace ContactsAPI.Controllers
         {
             this.dbContext = dbContext;
         }
+
+
         [HttpGet]
         public async Task<IActionResult> GetContacts()
         {
            return Ok(dbContext.Contacts.ToList());
         }
+
         [HttpGet("{id:Guid}")]
         public async Task<IActionResult> GetContact([FromRoute] Guid id)
         {
